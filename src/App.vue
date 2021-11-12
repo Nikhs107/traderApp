@@ -19,67 +19,16 @@
               <i class="fas fa-times fa-2x"></i>
             </button>
           </div>
-          <div class="container">
-            <b>Contact Information</b><br />
-            <b class="warning">* </b>Required<br />
-            <div class="row my-3">
-              <div class="col-md-6 col-xs-12">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="firstname"
-                  id="firstname"
-                  placeholder="First Name"
-                />
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="lastname"
-                  id="lastname"
-                  placeholder="Last Name"
-                />
-              </div>
-            </div>
-            <div class="row my-3">
-              <div class="col-md-6 col-xs-12">
-                <input
-                  class="form-control"
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                />
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="phonenumber"
-                  id="phonenumber"
-                  placeholder="Phone Number"
-                />
-              </div>
-            </div>
-            <br><br>
-            <div class="row my-3">
-              <div class="col-md-6 col-xs-12">
-              <b :style="{ float: 'left' }">My Offer</b>
-              <span :style="{ float: 'right' }">Current Asking Price : $8,999</span>
-              </div>
-            </div>
-            <div class="row my-3">
-              <div class="col-md-6 col-xs-12">
-                <input
-                  class="form-control"
-                  type="text"
-                  name="myoffer"
-                  id="myoffer"
-                  placeholder="Enter Offer"
-                />
-              </div>
-            </div>
+          <div class="scrollItems">
+            <Topform />
+            <hr />
+            <TradeIn />
+            <hr />
+            <Payment />
+            <hr />
+            <Message />
+            <hr />
+            <button class="btn btn-dark" type="submit">Submit</button>
           </div>
         </div>
       </div>
@@ -89,11 +38,19 @@
 
 <script>
 import Home from "./components/Home.vue";
+import Topform from "./components/Topform.vue";
+import TradeIn from "./components/TradeIn.vue";
+import Payment from "./components/Payment.vue";
+import Message from "./components/Message.vue";
 
 export default {
   name: "App",
   components: {
     Home,
+    Topform,
+    TradeIn,
+    Payment,
+    Message,
   },
   methods: {
     handleModal() {
@@ -117,6 +74,17 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.top {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.scrollItems {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .col-1 {
   text-align: right;
 }
@@ -131,7 +99,17 @@ export default {
 .btn {
   cursor: pointer;
 }
-
+.fontAwesome {
+  color: red;
+  display: inline-block;
+  border-radius: 50px;
+  border: 1px solid red;
+  padding: 5px;
+}
+.icon-text {
+  margin-left: 10px;
+  padding-bottom: 10px;
+}
 .modal {
   display: none;
   position: fixed;
