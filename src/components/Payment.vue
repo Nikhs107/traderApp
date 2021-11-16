@@ -19,34 +19,93 @@
       <div class="message-body">
         <div class="message-content">
           Select a Payment Option:
-          <div class="container">
+          <div class="container mt-2" :class="financePay === false ? 'back' : ''" @click="changePay(false)">
             <input
               type="radio"
               name="paymentOption"
               id="cash"
+              class="ms-3"
               @click="changePay(false)"
             />
             <label class="px-2" for="cash">Cash</label>
           </div>
           <br />
-          <div class="container">
+          <div class="container" :class="financePay === true ? 'back' : ''" @click="changePay(true)">
             <input
               type="radio"
               name="paymentOption"
               id="finance"
+              class="ms-3"
               checked
               @click="changePay(true)"
             />
             <label class="px-2" for="finance">Finance</label>
             <div v-show="financePay">
-              <hr />
+              <hr class="ms-3"/>
               <div class="col-md-7 col-xs-11">
                 <Dropdown label="Hows your Credit?" :list="credits" />
               </div>
               <br />
               <strong class="p-3">Estimated Monthly Payment</strong>
-              <hr />
-              <div class="disc">
+              <hr class="ms-3"/>
+              <div class="row ms-3 me-3">
+              <div class="col-md-6 col-xs-12">
+                <div class="row">
+                  <div class="col-md-5 col-xs-12">
+                    <label for="downPay" class="payLabel"> Down Payment</label>
+                  </div>
+                  <div class="col-md-7 col-xs-12">
+                    <input
+                      type="text"
+                      class="textbox"
+                      id="downPay"
+                      v-model="slider1Value"
+                    />
+                  </div>
+                </div>
+                <VueSlideBar
+                  v-model="slider1Value"
+                  :min="0"
+                  :max="8000"
+                  :processStyle="slider.processStyle"
+                  :lineHeight="slider.lineHeight"
+                  :tooltipStyles="{
+                    backgroundColor: 'gray',
+                    borderColor: 'black',
+                  }"
+                >
+                </VueSlideBar>
+                <h5 class="warning">{{ slider1Value }}</h5>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div class="row">
+                  <div class="col-md-5 col-xs-12">
+                    <label for="term" class="payLabel"> Term (months)</label>
+                  </div>
+                  <div class="col-md-7 col-xs-12">
+                    <input
+                      type="text"
+                      class="textbox"
+                      id="term"
+                      v-model="slider2Value"
+                    />
+                  </div>
+                </div>
+                <VueSlideBar
+                  v-model="slider2Value"
+                  :data="slider.values"
+                  :range="slider.range"
+                  :processStyle="slider.processStyle"
+                  :lineHeight="slider.lineHeight"
+                  :tooltipStyles="{
+                    backgroundColor: 'gray',
+                    borderColor: 'black',
+                  }"
+                >
+                </VueSlideBar>
+              </div>
+              </div>
+              <div class="disc ms-3">
                 <a href="#" @click="handleDisc">Disclaimer</a>
                 <p v-show="disclaimer">
                   This monthly payment estimate is based solely on the credit
@@ -72,11 +131,16 @@
 
 <script>
 import Dropdown from "./Dropdown.vue";
+import VueSlideBar from "vue-slide-bar";
 
 export default {
   name: "Payment",
   components: {
     Dropdown,
+    VueSlideBar,
+  },
+  props:{
+    offer:Number
   },
   data() {
     return {
@@ -89,6 +153,20 @@ export default {
       ],
       financePay: true,
       disclaimer: false,
+      slider1Value: "",
+      slider2Value: 48,
+      slider: {
+        lineHeight: 10,
+        processStyle: {
+          backgroundColor: "gray",
+        },
+        values:[
+          24,36,48,60,72
+        ],
+        range:[
+          {label:'24'},{label:'36'},{label:'48'},{label:'60'},{label:'72'}
+        ]
+      },
     };
   },
   methods: {
@@ -107,6 +185,8 @@ export default {
     },
     changePay(choice) {
       this.financePay = choice;
+      document.getElementById("cash").checked = !choice;
+      document.getElementById("finance").checked = choice;
     },
     handleDisc() {
       this.disclaimer = !this.disclaimer;
@@ -139,6 +219,7 @@ export default {
 }
 .message-content {
   padding: 20px;
+  padding-right: 30px;
 }
 .check,
 .active {
@@ -172,10 +253,21 @@ export default {
   border-radius: 0.8em;
   padding: auto;
 }
-.disc{
-  margin-left: 10px;
+.disc {
+  margin: 0px 10px;
 }
-.disc>p{
+.disc > p {
   margin-top: 10px;
+  text-align: justify;
+}
+.back {
+  background-color: #f0f0f0;
+}
+.textbox{
+  padding: 10px;
+  border-radius: 5px;
+}
+.payLabel{
+  padding: 10px 0px;
 }
 </style>

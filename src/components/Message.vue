@@ -21,8 +21,10 @@
             name="msgToDealer"
             id="msgToDealer"
             v-model="msgToDealer"
+            rows="10"
             placeholder="Message to Dealer"
           ></textarea>
+          <p>Stay Safe. Read more about <a href="#">avoiding scams and protecting your money</a>. By using this site, you agree to our <a href="#">Terms of Use</a> & our <a href="#">Privacy Policy</a>.</p>
         </div>
       </div>
     </article>

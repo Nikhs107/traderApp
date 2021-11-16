@@ -20,10 +20,11 @@ export default {
 <style scoped>
 .dropDown {
   width: 90%;
+  height: 60px;
   padding: 18px 20px;
   font-size: 15px;
   background: white;
-  margin: 8px 15px;
+  margin: 8px 20px;
   border-radius: 4px;
   box-sizing: border-box;
 }

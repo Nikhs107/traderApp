@@ -17,10 +17,10 @@
       <div class="message-body">
         <div class="message-content">
           <div class="col-md-6 col-xs-12">
-            <span class="check" id="no" @click="handleClick('no')"
+            <span class="check brd1" :class="!tradeIn ? 'active' : ''" id="no" @click="handleClick('no')"
               >No Trade in</span
             >
-            <span class="check" :class="tradeIn ? 'active' : ''" id="yes" @click="handleClick('yes')"
+            <span class="check brd2" :class="tradeIn ? 'active' : ''" id="yes" @click="handleClick('yes')"
               >Yes, I have a Trade-in</span
             >
           </div>
@@ -35,6 +35,7 @@
                   type="text"
                   class="inputField"
                   id="make"
+                  placeholder=" "
                   v-model="data.make"
                 />
                 <label for="make" class="ms-3"> Make</label>
@@ -46,12 +47,35 @@
                   type="text"
                   class="inputField"
                   id="model"
+                  placeholder=" "
                   v-model="data.model"
                 />
                 <label for="model" class="ms-3"> Model</label>
               </div>
               <div class="col-md-6 col-xs-12">
                 <Dropdown label="Condition" :list="conditions" />
+              </div>
+            </div>
+            <div class="row my-3">
+              <div class="box col-md-6 col-xs-12">
+                <input
+                  type="text"
+                  class="inputField"
+                  id="mileage"
+                  placeholder=" "
+                  v-model="data.mileage"
+                />
+                <label for="mileage" class="ms-3">Estimated Mileage</label>
+              </div>
+              <div class="box col-md-6 col-xs-12">
+                <input
+                  type="text"
+                  class="inputField"
+                  id="vin"
+                  placeholder=" "
+                  v-model="data.vin"
+                />
+                <label for="vin" class="ms-3">VIN</label>
               </div>
             </div>
           </div>
@@ -137,7 +161,7 @@ export default {
   max-height: 0;
 }
 .message-content {
-  padding: 20px;
+  padding: 30px 0px;
 }
 .check,
 .active {
@@ -147,27 +171,35 @@ export default {
   margin-bottom: 15px;
   padding: 15px;
   border: 1px solid black;
-  border-radius: 5px;
+}
+.brd2{
+  border-radius: 0px 5px 5px 0px;
+}
+.brd1{
+  border-radius: 5px 0px 0px 5px;
 }
 .check {
   background: white;
 }
 .active {
   background: #b5251920;
-  border: solid #b52519;
+  border: 2px solid #b52519;
 }
 label {
   font-size: 15px;
   position: absolute;
-  top: 35px;
+  top: 30px;
+  bottom: 40px;
   left: 25px;
   z-index: 12;
   transition-delay: ease 0.3s;
 }
-input:focus ~ label {
-  transform: translateY(-160%);
+input:focus ~ label, input:not(:placeholder-shown) ~ label {
+  transform: translate(-20%, -160%);
   font-size: 10px;
   color: grey;
+  padding-left: 10px;
+  padding-top: -20px;
 }
 .box {
   display: inline-block;
@@ -181,8 +213,6 @@ input:focus ~ label {
   font-size: 15px;
   margin: 10px 20px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  vertical-align: middle;
-  box-sizing: border-box;
+  border-radius: 5px;
 }
 </style>

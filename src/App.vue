@@ -19,16 +19,21 @@
               <i class="fas fa-times fa-2x"></i>
             </button>
           </div>
-          <div class="scrollItems">
-            <Topform />
+          <div class="scrollItems" v-show="!submitted">
+            <Topform :getData="getTopForm" />
             <hr />
             <TradeIn />
             <hr />
-            <Payment />
+            <Payment :offer="data.myoffer"/>
             <hr />
             <Message />
-            <hr />
-            <button class="btn btn-dark" type="submit">Submit</button>
+            <div class="bottom">
+              <hr />
+              <button class="subBtn" @click="handleSubmit">Submit</button>
+            </div>
+          </div>
+          <div v-show="submitted">
+            <Result :listdata="data" :closeModal="finished" />
           </div>
         </div>
       </div>
@@ -42,6 +47,7 @@ import Topform from "./components/Topform.vue";
 import TradeIn from "./components/TradeIn.vue";
 import Payment from "./components/Payment.vue";
 import Message from "./components/Message.vue";
+import Result from "./components/Result.vue";
 
 export default {
   name: "App",
@@ -51,6 +57,13 @@ export default {
     TradeIn,
     Payment,
     Message,
+    Result,
+  },
+  data() {
+    return {
+      data: {},
+      submitted: false,
+    };
   },
   methods: {
     handleModal() {
@@ -60,6 +73,16 @@ export default {
       } else {
         this.$refs.mymodal.style.display = view === "none" ? "block" : "none";
       }
+    },
+    getTopForm(data) {
+      this.data = data;
+    },
+    handleSubmit() {
+      this.submitted = true;
+    },
+    finished() {
+      this.submitted = false;
+      this.handleModal();
     },
   },
 };
@@ -74,19 +97,35 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+hr{
+  width: 95%;
+  text-align: center;
+}
 .top {
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 100;
+  background-color: white;
+}
+.bottom{
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  text-align: center;
+  background-color: white;
+  padding-top: 5px;
 }
 .scrollItems {
   max-height: 600px;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
-}
-.col-1 {
-  text-align: right;
+  right: -15px;
+  left: 15px;
+  top: 60px;
+  bottom: 10px;
+  position: absolute;
 }
 .warning {
   color: red;
@@ -111,28 +150,30 @@ export default {
   padding-bottom: 10px;
 }
 .modal {
-  display: none;
   position: fixed;
   z-index: 1;
   padding-top: 100px;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
 .modal-content {
   max-width: 50%;
+  height: 80%;
   position: relative;
   background-color: white;
   margin: auto;
   padding: 15px;
   text-align: left;
-  border: 1px solid #888;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
+  overflow: hidden;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.subBtn {
+  background-color: black;
+  color: aliceblue;
+  width: 50%;
+  border-radius: 5px;
+  padding: 10px 0px;
 }
 </style>
