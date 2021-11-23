@@ -2,35 +2,50 @@
   <div>
     <article class="message" :class="accordianClasses">
       <div class="message-header" @click="toggleAccordion">
-        <i class="fas fa-dollar-sign fa-lg"></i>
-        <span class="icon-text"
-          ><b>Review Payment Options</b><i>(Optional)</i></span
-        >
-        <button
-          :style="{
-            float: 'right',
-            border: 'none',
-            background: 'transparent',
-          }"
-        >
-          <i class="fas" :class="isOpen ? 'fa-angle-up' : 'fa-angle-down'"></i>
-        </button>
+        <div class="row">
+          <div class="icon">
+            <div class="circle"><i class="fas fa-dollar-sign fa-3x"></i></div>
+          </div>
+          <div class="icon-text">
+            <div :style="{ float: 'left' }">
+              <b>Review Payment Options</b><i>(Optional)</i>
+            </div>
+            <div :style="{ float: 'right' }">
+              <span class="angle" v-show="isOpen"
+                ><i class="fas fa-angle-up fa-lg"></i
+              ></span>
+              <span class="angle" v-show="!isOpen"
+                ><i class="fas fa-angle-down fa-lg"></i
+              ></span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="message-body">
         <div class="message-content">
           Select a Payment Option:
-          <div class="container mt-2" :class="financePay === false ? 'back' : ''" @click="changePay(false)">
+          <div
+            class="container mt-2"
+            :class="financePay === false ? 'back' : ''"
+            @click="changePay(false)"
+          >
             <input
               type="radio"
               name="paymentOption"
               id="cash"
               class="ms-3"
+              v-model="data.cash"
+              @input="getData"
               @click="changePay(false)"
             />
             <label class="px-2" for="cash">Cash</label>
           </div>
           <br />
-          <div class="container" :class="financePay === true ? 'back' : ''" @click="changePay(true)">
+          <div
+            class="container"
+            :class="financePay === true ? 'back' : ''"
+            @click="changePay(true)"
+          >
             <input
               type="radio"
               name="paymentOption"
@@ -41,69 +56,85 @@
             />
             <label class="px-2" for="finance">Finance</label>
             <div v-show="financePay">
-              <hr class="ms-3"/>
-              <div class="col-md-7 col-xs-11">
-                <Dropdown label="Hows your Credit?" :list="credits" />
+              <hr class="ms-3" />
+              <div class="ddPay col-md-7 col-xs-11">
+                <Dropdown
+                  label="Hows your Credit?"
+                  :list="credits"
+                  :getDDval="assignCredit"
+                  :ddBack="true"
+                />
               </div>
               <br />
               <strong class="p-3">Estimated Monthly Payment</strong>
-              <hr class="ms-3"/>
+              <hr class="ms-3" />
               <div class="row ms-3 me-3">
-              <div class="col-md-6 col-xs-12">
-                <div class="row">
-                  <div class="col-md-5 col-xs-12">
-                    <label for="downPay" class="payLabel"> Down Payment</label>
+                <div class="col-md-6 col-xs-12">
+                  <div class="row">
+                    <div class="col-md-5 col-xs-12">
+                      <label for="downPay" class="payLabel">
+                        Down Payment</label
+                      >
+                    </div>
+                    <div class="col-md-7 col-xs-12">
+                      <input
+                        type="text"
+                        class="textbox"
+                        id="downPay"
+                        v-model="data.downPay"
+                        @change="getData"
+                      />
+                    </div>
                   </div>
-                  <div class="col-md-7 col-xs-12">
+                  <div class="slider">
                     <input
-                      type="text"
-                      class="textbox"
-                      id="downPay"
+                      class="sliderBar"
+                      type="range"
+                      min="0"
+                      max="8000"
+                      value="4000"
                       v-model="slider1Value"
+                      @change="putValue"
                     />
                   </div>
+                  <h5 class="warning">{{ slider1Value }}</h5>
                 </div>
-                <VueSlideBar
-                  v-model="slider1Value"
-                  :min="0"
-                  :max="8000"
-                  :processStyle="slider.processStyle"
-                  :lineHeight="slider.lineHeight"
-                  :tooltipStyles="{
-                    backgroundColor: 'gray',
-                    borderColor: 'black',
-                  }"
-                >
-                </VueSlideBar>
-                <h5 class="warning">{{ slider1Value }}</h5>
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <div class="row">
-                  <div class="col-md-5 col-xs-12">
-                    <label for="term" class="payLabel"> Term (months)</label>
+                <div class="col-md-6 col-xs-12">
+                  <div class="row">
+                    <div class="col-md-5 col-xs-12">
+                      <label for="term" class="payLabel"> Term (months)</label>
+                    </div>
+                    <div class="col-md-7 col-xs-12">
+                      <input
+                        type="text"
+                        class="textbox"
+                        id="term"
+                        v-model="data.terms"
+                        @change="getData"
+                      />
+                    </div>
                   </div>
-                  <div class="col-md-7 col-xs-12">
+                  <div class="slider">
                     <input
-                      type="text"
-                      class="textbox"
-                      id="term"
+                      class="sliderBar"
+                      type="range"
+                      min="24"
+                      max="72"
+                      value="48"
+                      step="12"
+                      list="ticks1"
                       v-model="slider2Value"
+                      @change="putValue"
                     />
+                    <datalist id="ticks1">
+                      <option value="24">24</option>
+                      <option value="36">36</option>
+                      <option value="48">48</option>
+                      <option value="60">60</option>
+                      <option value="72">72</option>
+                    </datalist>
                   </div>
                 </div>
-                <VueSlideBar
-                  v-model="slider2Value"
-                  :data="slider.values"
-                  :range="slider.range"
-                  :processStyle="slider.processStyle"
-                  :lineHeight="slider.lineHeight"
-                  :tooltipStyles="{
-                    backgroundColor: 'gray',
-                    borderColor: 'black',
-                  }"
-                >
-                </VueSlideBar>
-              </div>
               </div>
               <div class="disc ms-3">
                 <a href="#" @click="handleDisc">Disclaimer</a>
@@ -131,19 +162,23 @@
 
 <script>
 import Dropdown from "./Dropdown.vue";
-import VueSlideBar from "vue-slide-bar";
 
 export default {
   name: "Payment",
+  props: {
+    getDDval: Function,
+  },
   components: {
     Dropdown,
-    VueSlideBar,
-  },
-  props:{
-    offer:Number
   },
   data() {
     return {
+      data: {
+        cash: false,
+        credits: "",
+        downPay: "",
+        terms: "",
+      },
       isOpen: false,
       credits: [
         "Excellent(720-850)",
@@ -155,18 +190,6 @@ export default {
       disclaimer: false,
       slider1Value: "",
       slider2Value: 48,
-      slider: {
-        lineHeight: 10,
-        processStyle: {
-          backgroundColor: "gray",
-        },
-        values:[
-          24,36,48,60,72
-        ],
-        range:[
-          {label:'24'},{label:'36'},{label:'48'},{label:'60'},{label:'72'}
-        ]
-      },
     };
   },
   methods: {
@@ -183,6 +206,11 @@ export default {
         document.getElementById("no").className = "check";
       }
     },
+    putValue() {
+      this.data.terms = this.slider2Value;
+      this.data.downPay = this.slider1Value;
+      this.getData();
+    },
     changePay(choice) {
       this.financePay = choice;
       document.getElementById("cash").checked = !choice;
@@ -190,6 +218,13 @@ export default {
     },
     handleDisc() {
       this.disclaimer = !this.disclaimer;
+    },
+    getData() {
+      this.$emit("payData", this.data);
+    },
+    assignCredit(val) {
+      this.data.credits = val;
+      this.getData();
     },
   },
   computed: {
@@ -203,23 +238,10 @@ export default {
 </script>
 
 <style scoped>
-.message {
-  margin-left: auto;
-  margin-right: auto;
-}
-.message-body {
-  overflow: hidden;
-  transition: 0.3s ease all;
-}
-.message-header {
-  cursor: pointer;
-}
-.is-closed .message-body {
-  max-height: 0;
-}
 .message-content {
-  padding: 20px;
   padding-right: 30px;
+  margin-left: 15px;
+  padding-top: 10px;
 }
 .check,
 .active {
@@ -248,10 +270,10 @@ export default {
   width: 1.6em;
   text-align: center;
   line-height: 1.6em;
-  color: red;
-  border: 1px solid red;
-  border-radius: 0.8em;
-  padding: auto;
+  color: darkred;
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 2px;
 }
 .disc {
   margin: 0px 10px;
@@ -263,11 +285,27 @@ export default {
 .back {
   background-color: #f0f0f0;
 }
-.textbox{
+.textbox {
   padding: 10px;
   border-radius: 5px;
+  width: 100%;
 }
-.payLabel{
+.payLabel {
   padding: 10px 0px;
+}
+.slider {
+  margin-top: 15px;
+}
+.sliderBar {
+  width: 100%;
+}
+datalist {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.ddPay {
+  margin: 20px;
+  margin-top: 35px;
 }
 </style>

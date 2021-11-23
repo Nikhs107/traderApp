@@ -2,17 +2,24 @@
   <div>
     <article class="message" :class="accordianClasses">
       <div class="message-header" @click="toggleAccordion">
-        <i class="far fa-file-alt fa-2x"></i>
-        <span class="icon-text"><b>Message Dealer </b><i>(Optional)</i></span>
-        <button
-          :style="{
-            float: 'right',
-            border: 'none',
-            background: 'transparent',
-          }"
-        >
-          <i class="fas" :class="isOpen ? 'fa-angle-up' : 'fa-angle-down'"></i>
-        </button>
+        <div class="row">
+          <div class="icon">
+            <div class="circle"><i class="far fa-file-alt fa-2x"></i></div>
+          </div>
+          <div class="icon-text">
+            <div :style="{ float: 'left' }">
+              <b>Message Dealer</b><i>(Optional)</i>
+            </div>
+            <div :style="{ float: 'right' }">
+              <span class="angle" v-show="isOpen"
+                ><i class="fas fa-angle-up fa-lg"></i
+              ></span>
+              <span class="angle" v-show="!isOpen"
+                ><i class="fas fa-angle-down fa-lg"></i
+              ></span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="message-body">
         <div class="message-content">
@@ -23,8 +30,14 @@
             v-model="msgToDealer"
             rows="10"
             placeholder="Message to Dealer"
+            @input="getData(msgToDealer)"
           ></textarea>
-          <p>Stay Safe. Read more about <a href="#">avoiding scams and protecting your money</a>. By using this site, you agree to our <a href="#">Terms of Use</a> & our <a href="#">Privacy Policy</a>.</p>
+          <p>
+            Stay Safe. Read more about
+            <a href="#">avoiding scams and protecting your money</a>. By using
+            this site, you agree to our <a href="#">Terms of Use</a> & our
+            <a href="#">Privacy Policy</a>.
+          </p>
         </div>
       </div>
     </article>
@@ -34,6 +47,9 @@
 <script>
 export default {
   name: "Message",
+  props: {
+    getData: Function,
+  },
   data() {
     return {
       msgToDealer: "",
@@ -56,34 +72,27 @@ export default {
 </script>
 
 <style scoped>
-.message {
-  margin-left: auto;
-  margin-right: auto;
-}
-.message-body {
-  overflow: hidden;
-  transition: 0.3s ease all;
-}
-.message-header {
-  cursor: pointer;
-}
-.is-closed .message-body {
-  max-height: 0;
-}
 .message-content {
-  padding: 20px;
+  padding: 10px 20px;
+  margin-right: 15px;
 }
 .fa-file-alt {
   font-size: 1.6em;
   width: 1.6em;
   text-align: center;
   line-height: 1.6em;
-  color: red;
-  border: 1px solid red;
-  border-radius: 0.8em;
-  padding: auto;
+  color: darkred;
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 1px;
 }
-textarea{
-    width: 100%;
+textarea {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.angle {
+  float: right;
+  margin-right: 30px;
 }
 </style>
